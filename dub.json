@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"hschu"
+	],
+	"copyright": "Copyright © 2020, hschu",
+	"dependencies": {
+		"derelict-sfml2": "~>3.0.2"
+	},
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "textadevnture"
+}
