@@ -9,6 +9,7 @@ import std.random;
 import std.algorithm;
 import ui.ui;
 import state.state;
+import std.conv;
 
 int window_width = 1200;
 int window_height = 900;
@@ -58,9 +59,13 @@ void main() {
             } else if(event.type == sfEvtMouseButtonPressed) {
 
             } else if (event.type == sfEvtKeyPressed) {
+                    ui.createText(to!string(event.key.code), ui.detailsBox);
                 if (event.key.code == 22) {
+                    state.moveSelectionUp();
+                } else if (event.key.code == 18) {
                     state.moveSelectionDown();
-                    ui.createText("w key press", ui.detailsBox);
+                } else if (event.key.code == 4 || event.key.code == 58) {
+                    state.execute();
                 }
             }
         }

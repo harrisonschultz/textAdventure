@@ -1,11 +1,16 @@
 module locations.location;
-import actions.action;
-import characters.enemy;
 
-class Location {
+import types.listItem;
+public import actions.action;
+public import characters.enemy;
+public import locations.locId;
+
+class Location : ListItem
+{
     string description;
-    
+
     Action[] actions;
     Enemy[] enemies;
-    Location[] connections;
+    LocId[] locations;
+
 }

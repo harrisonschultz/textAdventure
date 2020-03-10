@@ -1,36 +1,75 @@
 module state.state;
 import characters.player;
 import characters.enemy;
-import locations.location;
-import locations.plains;
+import locations;
 import std.conv;
+import types.menus;
+import std.stdio;
 
-class State {
+class State
+{
 
-    this() {
+    this()
+    {
         player = new Player();
-        inCombat = false;
         location = new Plains();
+        menu = Menus.actions;
         selectedAction = 0;
     }
 
     Player player;
-    bool inCombat;
     Location location;
     Enemy enemy;
+    Menus menu;
     int selectedAction;
 
-    void moveSelectionDown() {
+    void moveSelectionDown()
+    {
+        ulong cap;
         selectedAction++;
-        if (selectedAction + 1 > location.actions.length) {
+        if (menu == Menus.move)
+        {
+            cap = location.locations.length;
+        }
+        else if (menu == Menus.actions)
+        {
+            cap = location.actions.length;
+        }
+        if (selectedAction + 1 > cap)
+        {
             selectedAction = 0;
         }
     };
 
-    void moveSelectionUp() {
+    void moveSelectionUp()
+    {
+        ulong cap;
         selectedAction--;
-        if (selectedAction < 0) {
-            selectedAction = to!int(location.actions.length) - 1;
+        if (menu == Menus.move)
+        {
+            cap = location.locations.length;
+        }
+        else if (menu == Menus.actions)
+        {
+            cap = location.actions.length;
+        }
+        if (selectedAction < 0)
+        {
+            selectedAction = to!int(cap) - 1;
         }
     };
+
+    State execute()
+    {
+        if (menu == Menus.move)
+        {
+            writeln(location.locations[selectedAction].name);
+            location = locations.instantiateLocation(location.locations[selectedAction].className);
+            writeln(location);
+            menu = Menus.actions;
+            return this;
+        }
+        return location.actions[selectedAction].onExecute(this);
+    }
+
 }

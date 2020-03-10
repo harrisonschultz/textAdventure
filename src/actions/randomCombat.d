@@ -1,17 +1,15 @@
-module actions.move;
+module actions.randomCombat;
 import actions.action;
 import std.stdio;
-import types.menus;
 
-class Move : Action {
+class RandomCombat : Action {
 
     this() {
-        name = "Move";
+        name = "Fight";
     }
     
     override State onExecute (State state) {
-        state.menu = Menus.move;
+        writeln("Fight");
         return state;
     }
-
 }

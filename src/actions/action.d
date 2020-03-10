@@ -1,7 +1,7 @@
 module actions.action;
 public import state.state;
+import types.listItem;
 
-class Action {
-    string name;
-    State onExecute;
+class Action : ListItem {
+    
 }
