@@ -65,6 +65,26 @@ public:
             createActionList(actions);
             createText(state.location.description, descriptionBox);
         }
+        else if (state.menu == Menus.combat)
+        {
+            string[] actions;
+            foreach (act; state.player.combatActions)
+            {
+                actions ~= act.name;
+            }
+            createActionList(actions);
+            createText(state.location.description, descriptionBox);
+        }
+        else if (state.menu == Menus.attack)
+        {
+            string[] actions;
+            foreach (act; state.player.gear.weapon.attacks)
+            {
+                actions ~= act.name;
+            }
+            createActionList(actions);
+            createText(state.location.description, descriptionBox);
+        }
     }
 
     void createActionList(string[] items)
@@ -160,9 +180,8 @@ public:
     }
 
     void createText(string words, sfRectangleShape* rect, float offsetX = 0,
-            float offsetY = 0, bool wrapText = true)
+            float offsetY = 0, short characterSize = 25, bool wrapText = true)
     {
-        const(short) characterSize = 25;
         auto font = sfFont_createFromFile("./assets/SourceSansPro-Regular.ttf"); // Find were to put new line characters (text wrap) 
         // rectSize.x - 20 (-20 is for the 'padding' on each side.)
         const(sfVector2f) rectSize = sfRectangleShape_getSize(rect);
@@ -185,16 +204,15 @@ public:
     void fillDetails(Player player)
     {
         const(string) attrColumnOne = "STR:\nDEX:\nPER:";
-        const(string) attrColumnTwo = format("%s\n%s\n%s", player.attr.str,
-                player.attr.dex, player.attr.per);
+        const(string) attrColumnTwo = format("%s\n%s\n%s", player.attr["str"],
+                player.attr["dex"], player.attr["per"]);
         const(string) attrColumnThree = "INT:\nCON:\n";
-        const(string) attrColumnFour = format("%s\n%s", player.attr.mnd, player.attr.con);
+        const(string) attrColumnFour = format("%s\n%s", player.attr["mnd"], player.attr["con"]);
 
-        createText(attrColumnOne, detailsBox, 0, 150, false);
-        createText(attrColumnTwo, detailsBox, 60, 150, false);
-        createText(attrColumnThree, detailsBox, 120, 150, false);
-        createText(attrColumnFour, detailsBox, 180, 150, false);
-
+        createText(attrColumnOne, detailsBox, 0, 150, 20, false);
+        createText(attrColumnTwo, detailsBox, 60, 150, 20, false);
+        createText(attrColumnThree, detailsBox, 120, 150, 20, false);
+        createText(attrColumnFour, detailsBox, 180, 150, 20, false);
     }
 
 }

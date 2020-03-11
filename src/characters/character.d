@@ -1,6 +1,8 @@
 module characters.character;
-import details.attributes;
+public import details.attributes;
+public import details.gear;
 
 class Character {
-    Attributes attributes;
+    short[string] attr;
+    Gear gear;
 }

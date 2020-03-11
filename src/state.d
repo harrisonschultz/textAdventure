@@ -1,6 +1,6 @@
 module state.state;
 import characters.player;
-import characters.enemy;
+import characters.character;
 import locations;
 import std.conv;
 import types.menus;
@@ -19,7 +19,7 @@ class State
 
     Player player;
     Location location;
-    Enemy enemy;
+    Character enemy;
     Menus menu;
     int selectedAction;
 

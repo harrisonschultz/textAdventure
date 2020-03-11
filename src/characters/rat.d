@@ -1,17 +1,22 @@
 module characters.rat;
-import characters.enemy;
 
-class Rat : Enemy {
+import items.weapons.ratClaw;
+import items.armors.ratHide;
+import characters.character;
 
-    this() {
-      attributes.str = 1;
-      attributes.dex = 1;
-      attributes.per = 1;
-      attributes.mnd = 1;
-      attributes.con = 1;
+class Rat : Character
+{
 
-      armor.armor = 1;
-    }
+  this()
+  {
+    attr["str"] = 1;
+    attr["dex"] = 1;
+    attr["per"] = 1;
+    attr["mnd"] = 1;
+    attr["con"] = 1;
 
-    
+    gear.weapon = new RatClaw();
+    gear.chest = new RatHide();
+  }
+
 }
