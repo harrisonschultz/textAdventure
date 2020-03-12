@@ -19,11 +19,13 @@ class RandomCombat : Action
         state.menu = Menus.combat;
         if (length == 1)
         {
+            state.location.enemies[0].renew();
             state.enemy = state.location.enemies[0];
         }
         else
         {
             ulong enemyIndex = uniform(0, state.location.enemies.length - 1);
+            state.location.enemies[enemyIndex].renew();
             state.enemy = state.location.enemies[enemyIndex];
         }
         return state;

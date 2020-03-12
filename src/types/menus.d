@@ -6,4 +6,5 @@ enum Menus
    combat,
    actions,
    attack,
+   combatOver,
 }

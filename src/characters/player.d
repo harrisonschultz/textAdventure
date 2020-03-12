@@ -20,6 +20,11 @@ public:
       attr["mnd"] = 1;
       attr["con"] = 3;
 
+      level = 1;
+      exp = 0;
+
+      health = Stats.getMaxHealth(this);
+
       gear.weapon = new Unarmed();
       gear.chest = new LinenShirt();
 

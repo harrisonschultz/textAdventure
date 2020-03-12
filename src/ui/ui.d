@@ -11,7 +11,12 @@ import state.state;
 import actions.action;
 import characters.player;
 import types.menus;
+import std.stdio;
+import details.stats;
+import characters.character;
 import types.listItem;
+import actions.next;
+import combat.combat;
 
 class UI
 {
@@ -73,7 +78,9 @@ public:
                 actions ~= act.name;
             }
             createActionList(actions);
-            createText(state.location.description, descriptionBox);
+            createText(state.enemy.description, descriptionBox);
+
+            healthDisplay(state.enemy, descriptionBox, 0, 200, 20, false);
         }
         else if (state.menu == Menus.attack)
         {
@@ -83,7 +90,13 @@ public:
                 actions ~= act.name;
             }
             createActionList(actions);
-            createText(state.location.description, descriptionBox);
+            createText(state.enemy.description, descriptionBox);
+
+            healthDisplay(state.enemy, descriptionBox, 0, 200, 20, false);
+        } else if (state.menu == Menus.combatOver)
+        {
+            createActionList([new Next().name]);
+            createText(Combat.combatRewardText(state), descriptionBox);
         }
     }
 
@@ -203,16 +216,34 @@ public:
 
     void fillDetails(Player player)
     {
-        const(string) attrColumnOne = "STR:\nDEX:\nPER:";
+        // Health & Status
+        createText("Health", detailsBox, 0, 140, 20, false);
+        createText(to!string(player.health), detailsBox, 80, 140, 20, false);
+        createText(format("/ %s", to!string(Stats.getMaxHealth(player))),
+                detailsBox, 100, 140, 20, false);
+
+        // Attributes
+        const(string) attrColumnOne = "STR\nDEX\nPER";
         const(string) attrColumnTwo = format("%s\n%s\n%s", player.attr["str"],
                 player.attr["dex"], player.attr["per"]);
-        const(string) attrColumnThree = "INT:\nCON:\n";
+        const(string) attrColumnThree = "INT\nCON\n";
         const(string) attrColumnFour = format("%s\n%s", player.attr["mnd"], player.attr["con"]);
 
-        createText(attrColumnOne, detailsBox, 0, 150, 20, false);
-        createText(attrColumnTwo, detailsBox, 60, 150, 20, false);
-        createText(attrColumnThree, detailsBox, 120, 150, 20, false);
-        createText(attrColumnFour, detailsBox, 180, 150, 20, false);
+        createText(attrColumnOne, detailsBox, 0, 180, 20, false);
+        createText(attrColumnTwo, detailsBox, 60, 180, 20, false);
+        createText(attrColumnThree, detailsBox, 120, 180, 20, false);
+        createText(attrColumnFour, detailsBox, 180, 180, 20, false);
+    }
+
+    void healthDisplay(Character character, sfRectangleShape* rect, float offsetX = 0,
+            float offsetY = 0, short characterSize = 25, bool wrapText = true)
+    {
+
+        // Health & Status
+        createText("Health", rect, offsetX, offsetY, characterSize, false);
+        createText(to!string(character.health), rect, offsetX + 80, offsetY, characterSize, false);
+        createText(format("/ %s", to!string(Stats.getMaxHealth(character))),
+                rect, offsetX + 100, offsetY, characterSize, wrapText);
     }
 
 }

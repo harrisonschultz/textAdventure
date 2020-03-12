@@ -15,8 +15,13 @@ class Rat : Character
     attr["mnd"] = 1;
     attr["con"] = 1;
 
+    health = Stats.getMaxHealth(this);
+
     gear.weapon = new RatClaw();
     gear.chest = new RatHide();
+
+    description = "A rat, disease striken. Lives and breathes in filth.";
+    expReward = 1;
   }
 
 }
