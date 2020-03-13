@@ -17,6 +17,7 @@ import characters.character;
 import types.listItem;
 import actions.next;
 import combat.combat;
+import actions.resurrect;
 
 class UI
 {
@@ -43,7 +44,7 @@ public:
     sfRectangleShape* detailsBox;
     sfRectangleShape* highlight;
 
-    void update(State state)
+    void update(State* state)
     {
         createDescriptionBox();
         createOptionsBox();
@@ -93,10 +94,16 @@ public:
             createText(state.enemy.description, descriptionBox);
 
             healthDisplay(state.enemy, descriptionBox, 0, 200, 20, false);
-        } else if (state.menu == Menus.combatOver)
+        }
+        else if (state.menu == Menus.combatOver)
         {
             createActionList([new Next().name]);
             createText(Combat.combatRewardText(state), descriptionBox);
+        }
+        else if (state.menu == Menus.playerKilled)
+        {
+            createActionList([new Resurrect().name]);
+            createText(Combat.deathText(state), descriptionBox);
         }
     }
 

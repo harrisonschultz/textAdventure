@@ -19,9 +19,4 @@ class Plains : Location
         enemies = [new Rat()];
     }
 
-    override State onExecute(State state)
-    {
-        state.location = this;
-        return state;
-    }
 }

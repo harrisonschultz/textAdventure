@@ -5,5 +5,5 @@ import state.state;
 class ListItem
 {
    string name;
-   abstract State onExecute(State);
+   abstract void onExecute(State*);
 }

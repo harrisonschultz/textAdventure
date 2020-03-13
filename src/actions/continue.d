@@ -9,9 +9,8 @@ class Next : Action {
         name = "Continue";
     }
     
-    override State onExecute (State state) {
+    override void onExecute (State* state) {
         state.menu = Menus.actions;
-        return state;
     }
 
 }

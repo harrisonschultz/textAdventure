@@ -7,4 +7,5 @@ enum Menus
    actions,
    attack,
    combatOver,
+   playerKilled,
 }

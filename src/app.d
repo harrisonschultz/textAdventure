@@ -10,6 +10,7 @@ import std.algorithm;
 import ui.ui;
 import state.state;
 import std.conv;
+import engine;
 
 int window_width = 1200;
 int window_height = 900;
@@ -40,7 +41,6 @@ void main() {
 
     // create the ui
     UI ui = new UI(window_width , window_height, win);
-  
 
     // Init state
     State state = new State();
@@ -52,7 +52,7 @@ void main() {
         // poll events
         auto event = new sfEvent;
              sfRenderWindow_clear(win, sfBlack);
-        ui.update(state);
+        ui.update(&state);
         while(sfRenderWindow_pollEvent(win, event)) {
             if (event.type == sfEvtClosed) {
                 sfRenderWindow_close(win);
@@ -61,11 +61,11 @@ void main() {
             } else if (event.type == sfEvtKeyPressed) {
                     ui.createText(to!string(event.key.code), ui.detailsBox);
                 if (event.key.code == 22) {
-                    state.moveSelectionUp();
+                    Engine.moveSelectionUp(&state);
                 } else if (event.key.code == 18) {
-                    state.moveSelectionDown();
+                    Engine.moveSelectionDown(&state);
                 } else if (event.key.code == 4 || event.key.code == 58) {
-                    state.execute();
+                    Engine.execute(&state);
                 }
             }
         }

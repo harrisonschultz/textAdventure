@@ -10,9 +10,6 @@ struct Attack
    DamageTypes damageType;
    string name;
 
-   State onExecute(State state) {
-
-
-      return state;
+   void onExecute(State* state) {
    }
 }

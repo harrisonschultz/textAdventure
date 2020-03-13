@@ -13,7 +13,7 @@ class Rat : Character
     attr["dex"] = 1;
     attr["per"] = 1;
     attr["mnd"] = 1;
-    attr["con"] = 1;
+    attr["con"] = 10;
 
     health = Stats.getMaxHealth(this);
 

@@ -10,9 +10,8 @@ class Flee : Action {
         name = "Flee";
     }
     
-    override State onExecute (State state) {
+    override void onExecute (State* state) {
         state.menu = Menus.actions;
-        return state;
     }
 
 }

@@ -13,7 +13,7 @@ class RandomCombat : Action
         name = "Fight";
     }
 
-    override State onExecute(State state)
+    override void onExecute(State* state)
     {
         ulong length = state.location.enemies.length;
         state.menu = Menus.combat;
@@ -28,6 +28,5 @@ class RandomCombat : Action
             state.location.enemies[enemyIndex].renew();
             state.enemy = state.location.enemies[enemyIndex];
         }
-        return state;
     }
 }

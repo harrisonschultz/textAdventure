@@ -10,9 +10,8 @@ class Attack : Action {
         name = "Attack";
     }
     
-    override State onExecute (State state) {
+    override void onExecute (State* state) {
         state.menu = Menus.attack;
-        return state;
     }
 
 }

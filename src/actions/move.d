@@ -9,9 +9,8 @@ class Move : Action {
         name = "Move";
     }
     
-    override State onExecute (State state) {
+    override void onExecute (State* state) {
         state.menu = Menus.move;
-        return state;
     }
 
 }
