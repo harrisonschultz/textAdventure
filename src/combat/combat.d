@@ -4,6 +4,7 @@ import characters.character;
 import items.weapons.weapon;
 import details.stats;
 import std.math;
+import std.random;
 import std.conv;
 import state.state;
 import std.format;
@@ -11,6 +12,9 @@ import std.ascii;
 import std.stdio;
 import characters.player;
 import combat.ai;
+import items.item;
+import items.loot;
+import std.array;
 
 class Combat
 {
@@ -44,7 +48,7 @@ class Combat
       return "";
    }
 
-   static deathText(State* state)
+   static string deathText(State* state)
    {
       return "You died. You are resurrected by an unknown source.";
    }
@@ -68,10 +72,23 @@ class Combat
       return to!short(round(damage));
    }
 
-   static Player setRewards(State* state)
+   static void setRewards(State* state)
    {
-      Player player = Stats.addExp(state.player, state.enemy.expReward);
-      return player;
+      Stats.handleExp(state.player, state.enemy.expReward);
+      state.player.inventory = join([state.player.inventory, findLoot(state.enemy)]);
+   }
+
+   static Item[] findLoot(Character enemy) {
+      Item[] found;
+
+      foreach (loot; enemy.loot) {
+         int roll = uniform(0, 100);
+         if (roll <= loot.dropChance) {
+            found ~= loot.item;
+         }
+      }
+
+      return found;
    }
 
    static Player playerKilled(Player player)

@@ -88,6 +88,10 @@ class Engine
       {
          state.menu = Menus.actions;
       }
+      else if (state.menu == Menus.combatOver)
+      {
+         state.menu = Menus.actions;
+      }
       else
       {
          state.location.actions[state.selectedAction].onExecute(state);

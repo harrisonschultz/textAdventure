@@ -37,15 +37,26 @@ public:
    }
 
    static Player addExp(Player character, short exp) {
-      short maxExp = getMaxExp(character);
       character.exp += exp;
 
+      return character;
+   }
+
+   static Player addLevel(Player character) {
+      character.level += 1;
+      character.openAttrPoints += 2;
+      character.openSkillPoints += 2;
+      return character;
+   }
+
+   static Player handleExp(Player character, short exp) {
+      short maxExp = getMaxExp(character);
+      character = addExp(character, exp);
       // level exp threshold is reached
       if (character.exp >= maxExp) {
          character.exp -= maxExp;
-         character.level += 1;
+         character = addLevel(character);
       }
-
       return character;
    }
 

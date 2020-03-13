@@ -240,6 +240,12 @@ public:
         createText(attrColumnTwo, detailsBox, 60, 180, 20, false);
         createText(attrColumnThree, detailsBox, 120, 180, 20, false);
         createText(attrColumnFour, detailsBox, 180, 180, 20, false);
+
+        // Unallocated Points
+        createText("Attribute Points", detailsBox, 0, 260, 20, false);
+        createText(to!string(player.openAttrPoints), detailsBox, 180, 260, 20, false);
+        createText("Skill Points", detailsBox, 0, 285, 20, false);
+        createText(to!string(player.openSkillPoints), detailsBox, 180, 285, 20, false);
     }
 
     void healthDisplay(Character character, sfRectangleShape* rect, float offsetX = 0,

@@ -7,5 +7,6 @@ class LinenShirt : Armor
    {
       armorType = ArmorTypes.fabric;
       armor = 1;
+      value = 1;
    }
 }

@@ -4,5 +4,6 @@ enum ItemType
 {
    consumable,
    weapon,
-   armor
+   armor,
+   trash
 }

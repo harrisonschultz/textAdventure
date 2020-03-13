@@ -3,6 +3,7 @@ import details.attributes;
 import details.gear;
 import items.weapons.unarmed;
 import items.armors.linenShirt;
+import items.item;
 import characters.character;
 import actions.attack;
 import actions.action;
@@ -25,6 +26,8 @@ public:
 
       health = Stats.getMaxHealth(this);
 
+      gold = 0;
+
       gear.weapon = new Unarmed();
       gear.chest = new LinenShirt();
 
@@ -32,4 +35,9 @@ public:
    }
 
    Action[] combatActions;
+   int gold;
+
+   Item[] inventory;
+   short openAttrPoints = 0;
+   short openSkillPoints = 0;
 }
