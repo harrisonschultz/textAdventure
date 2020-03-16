@@ -26,6 +26,6 @@ class Rat : Character
     description = "A rat, disease striken. Lives and breathes in filth.";
     expReward = 1;
 
-    loot = [new Loot(new RatFur(), 100)];
+    loot = [new Loot(new RatFur(), 33)];
   }
 }

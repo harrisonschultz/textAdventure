@@ -8,4 +8,7 @@ enum Menus
    attack,
    combatOver,
    playerKilled,
+   store,
+   buy,
+   shop
 }

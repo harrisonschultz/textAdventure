@@ -50,6 +50,10 @@ class Engine
       {
          cap = state.player.gear.weapon.attacks.length;
       }
+      else if (state.menu == Menus.shop)
+      {
+         cap = state.player.inventory.length + state.location.shop.items.length;
+      }
       return cap;
    }
 

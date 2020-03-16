@@ -15,7 +15,7 @@ class Plains : Location
         name = "Plains";
         description = "Grass as far as the eye can see. Fields of amber grain litter the grassland.";
         actions = [new Move(), new RandomCombat()];
-        locations = [ratsNestLoc];
+        locations = [haydensBoroughLoc, ratsNestLoc];
         enemies = [new Rat()];
     }
 

@@ -10,6 +10,7 @@ import std.conv;
 import state.state;
 import actions.action;
 import characters.player;
+import shops.shop;
 import types.menus;
 import std.stdio;
 import details.stats;
@@ -53,7 +54,7 @@ public:
         createDescriptionBox();
         createOptionsBox();
         createDetailsBox();
-        createSelectionHighlight(state.selectedAction);
+
         fillDetails(state.player);
         if (state.menu == Menus.actions)
         {
@@ -109,6 +110,13 @@ public:
             createActionList([new Resurrect().name]);
             createText(Combat.deathText(state), descriptionBox);
         }
+        else if (state.menu == Menus.shop)
+        {
+            createActionList([new Resurrect().name]);
+            createShopList(state.location.shop, state.player.inventory);
+        }
+
+        createSelectionHighlight(state);
     }
 
     void createActionList(string[] items)
@@ -142,17 +150,40 @@ public:
         }
     }
 
-    void createSelectionHighlight(int actionIndex)
+    void createSelectionHighlight(State* state)
     {
         const(float) padding = 5;
         const(float) lineHeight = 25; // Configure
         const(short) paddingBetweenLines = 10;
-        sfRectangleShape_setFillColor(highlight, sfColor(100, 107, 115, 60));
-        sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
-                windowHeight - 300 + 20 + ((lineHeight + paddingBetweenLines) * actionIndex)
-                + padding));
-        sfRectangleShape_setSize(highlight, sfVector2f(100, lineHeight + 10));
+        sfRectangleShape_setFillColor(highlight, sfColor(200, 107, 115, 60));
 
+        if (state.menu == Menus.shop)
+        {
+            ulong buyLength = state.location.shop.items.length - 1;
+            ulong sellLength = state.player.inventory.length - 1;
+            sfRectangleShape_setSize(highlight, sfVector2f(300, lineHeight + 10));
+            // Render buy selected highlight
+            if (state.selectedAction < sellLength)
+            {
+                sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
+                        windowHeight + 20 + (
+                        (lineHeight + paddingBetweenLines) * state.selectedAction) + padding));
+            }
+            else
+            {
+                sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
+                        windowHeight + 20 + ((lineHeight + paddingBetweenLines) * (
+                        state.selectedAction - buyLength)) + padding));
+            }
+
+        }
+        else
+        {
+            sfRectangleShape_setSize(highlight, sfVector2f(350, lineHeight + 10));
+            sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
+                    windowHeight - 300 + 20 + (
+                    (lineHeight + paddingBetweenLines) * state.selectedAction) + padding));
+        }
         // Draw
         sfRenderWindow_drawRectangleShape(window, highlight, null);
     }
@@ -233,31 +264,22 @@ public:
         createText(to!string(player.level), detailsBox, 180, 180, 18, false);
         createText("Experience", detailsBox, 0, 205, 18, false);
         createText(format("%s / %s", to!string(player.exp),
-                to!string(Stats.getMaxExp(player))), detailsBox, 180, 205, 18, false);
-
-        // Unallocated Points
+                to!string(Stats.getMaxExp(player))), detailsBox, 180, 205, 18, false); // Unallocated Points
         createText("Attribute Points", detailsBox, 0, 235, 18, false);
         createText(to!string(player.openAttrPoints), detailsBox, 180, 235, 18, false);
         createText("Skill Points", detailsBox, 0, 260, 18, false);
-        createText(to!string(player.openSkillPoints), detailsBox, 180, 260, 18, false);
-
-        // Attributes
+        createText(to!string(player.openSkillPoints), detailsBox, 180, 260, 18, false); // Attributes
         const(string) attrColumnOne = "STR\nDEX\nPER";
         const(string) attrColumnTwo = format("%s\n%s\n%s", player.attr["str"],
                 player.attr["dex"], player.attr["per"]);
         const(string) attrColumnThree = "INT\nCON\n";
         const(string) attrColumnFour = format("%s\n%s", player.attr["mnd"], player.attr["con"]);
-
         createText(attrColumnOne, detailsBox, 0, 290, 18, false);
         createText(attrColumnTwo, detailsBox, 60, 290, 18, false);
         createText(attrColumnThree, detailsBox, 120, 290, 18, false);
-        createText(attrColumnFour, detailsBox, 180, 290, 18, false);
-
-        // Golds
+        createText(attrColumnFour, detailsBox, 180, 290, 18, false); // Golds
         createText("Gold", detailsBox, 0, 375, 18, false);
-        createText(to!string(player.gold), detailsBox, 180, 375, 18, false);
-
-        // Inventory
+        createText(to!string(player.gold), detailsBox, 180, 375, 18, false); // Inventory
         createText("Inventory", detailsBox, 70, 405, 18, false);
         inventoryDisplay(player, detailsBox, 0, 430, 18, true);
     }
@@ -285,9 +307,41 @@ public:
         // Sort names.
         foreach (i, name; itemNames)
         {
-            createText(name, rect, offsetX, offsetY + (characterSize * i + 5), characterSize, false);
+            createText(name, rect, offsetX, offsetY + (characterSize * i + 5),
+                    characterSize, wrapText);
         }
 
+    }
+
+    void createShopList(Shop shop, Item[] inv)
+    {
+        float offsetX = 20;
+        float offsetY = 20;
+        short characterSize = 25;
+
+        // Buy
+        createText("Buy", descriptionBox, offsetX, offsetY);
+        createText("Price", descriptionBox, offsetX + 215, offsetY);
+
+        foreach (i, item; shop.items)
+        {
+            createText(item.name, descriptionBox, offsetX,
+                    offsetY + (25 * i + 5) + 50, characterSize, false);
+            createText(to!string(item.value), descriptionBox, offsetX + 240,
+                    offsetY + (25 * i + 5) + 50, characterSize, false);
+        }
+
+        // Sell
+        createText("Sell", descriptionBox, offsetX + 320, 20);
+        createText("Value", descriptionBox, offsetX + 320 + 215, 20);
+
+        foreach (p, it; inv)
+        {
+            createText(it.name, descriptionBox, offsetX + 320,
+                    offsetY + (25 * p + 5) + 50, characterSize, false);
+            createText(to!string(it.value), descriptionBox, offsetX + 320 + 240,
+                    offsetY + (25 * p + 5) + 50, characterSize, false);
+        }
     }
 
 }
