@@ -4,6 +4,7 @@ class RatFur : Item {
    this () {
       value = 1;
       type = ItemType.trash;
-      name = "Fur of a rat, near worthless";
+      description = "Fur of a rat, near worthless";
+      name = "Rat Fur";
    }
 }

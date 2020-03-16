@@ -16,6 +16,7 @@ import details.stats;
 import characters.character;
 import types.listItem;
 import actions.next;
+import items.item;
 import combat.combat;
 import actions.resurrect;
 
@@ -33,6 +34,8 @@ class UI
         detailsBox = sfRectangleShape_create();
         highlight = sfRectangleShape_create();
         this.createDescriptionBox();
+
+        font = sfFont_createFromFile("./assets/SourceSansPro-Regular.ttf");
     }
 
 public:
@@ -43,6 +46,7 @@ public:
     sfRectangleShape* optionsBox;
     sfRectangleShape* detailsBox;
     sfRectangleShape* highlight;
+    sfFont* font;
 
     void update(State* state)
     {
@@ -112,7 +116,6 @@ public:
         short characterSize = 25;
         const(short) paddingBetweenLines = 10;
         short index = 0;
-        auto font = sfFont_createFromFile("./assets/SourceSansPro-Regular.ttf");
 
         foreach (item; items)
         {
@@ -202,7 +205,6 @@ public:
     void createText(string words, sfRectangleShape* rect, float offsetX = 0,
             float offsetY = 0, short characterSize = 25, bool wrapText = true)
     {
-        auto font = sfFont_createFromFile("./assets/SourceSansPro-Regular.ttf"); // Find were to put new line characters (text wrap) 
         // rectSize.x - 20 (-20 is for the 'padding' on each side.)
         const(sfVector2f) rectSize = sfRectangleShape_getSize(rect);
         const(short) totalColumns = cast(short)(rectSize.x - 20) / 10;
@@ -224,10 +226,20 @@ public:
     void fillDetails(Player player)
     {
         // Health & Status
-        createText("Health", detailsBox, 0, 140, 20, false);
-        createText(to!string(player.health), detailsBox, 80, 140, 20, false);
-        createText(format("/ %s", to!string(Stats.getMaxHealth(player))),
-                detailsBox, 100, 140, 20, false);
+        healthDisplay(cast(Character) player, detailsBox, 0, 140, 18);
+
+        // Exp & level
+        createText("Level", detailsBox, 0, 180, 18, false);
+        createText(to!string(player.level), detailsBox, 180, 180, 18, false);
+        createText("Experience", detailsBox, 0, 205, 18, false);
+        createText(format("%s / %s", to!string(player.exp),
+                to!string(Stats.getMaxExp(player))), detailsBox, 180, 205, 18, false);
+
+        // Unallocated Points
+        createText("Attribute Points", detailsBox, 0, 235, 18, false);
+        createText(to!string(player.openAttrPoints), detailsBox, 180, 235, 18, false);
+        createText("Skill Points", detailsBox, 0, 260, 18, false);
+        createText(to!string(player.openSkillPoints), detailsBox, 180, 260, 18, false);
 
         // Attributes
         const(string) attrColumnOne = "STR\nDEX\nPER";
@@ -236,27 +248,46 @@ public:
         const(string) attrColumnThree = "INT\nCON\n";
         const(string) attrColumnFour = format("%s\n%s", player.attr["mnd"], player.attr["con"]);
 
-        createText(attrColumnOne, detailsBox, 0, 180, 20, false);
-        createText(attrColumnTwo, detailsBox, 60, 180, 20, false);
-        createText(attrColumnThree, detailsBox, 120, 180, 20, false);
-        createText(attrColumnFour, detailsBox, 180, 180, 20, false);
+        createText(attrColumnOne, detailsBox, 0, 290, 18, false);
+        createText(attrColumnTwo, detailsBox, 60, 290, 18, false);
+        createText(attrColumnThree, detailsBox, 120, 290, 18, false);
+        createText(attrColumnFour, detailsBox, 180, 290, 18, false);
 
-        // Unallocated Points
-        createText("Attribute Points", detailsBox, 0, 260, 20, false);
-        createText(to!string(player.openAttrPoints), detailsBox, 180, 260, 20, false);
-        createText("Skill Points", detailsBox, 0, 285, 20, false);
-        createText(to!string(player.openSkillPoints), detailsBox, 180, 285, 20, false);
+        // Golds
+        createText("Gold", detailsBox, 0, 375, 18, false);
+        createText(to!string(player.gold), detailsBox, 180, 375, 18, false);
+
+        // Inventory
+        createText("Inventory", detailsBox, 70, 405, 18, false);
+        inventoryDisplay(player, detailsBox, 0, 430, 18, true);
     }
 
     void healthDisplay(Character character, sfRectangleShape* rect, float offsetX = 0,
             float offsetY = 0, short characterSize = 25, bool wrapText = true)
     {
-
         // Health & Status
         createText("Health", rect, offsetX, offsetY, characterSize, false);
         createText(to!string(character.health), rect, offsetX + 80, offsetY, characterSize, false);
         createText(format("/ %s", to!string(Stats.getMaxHealth(character))),
                 rect, offsetX + 100, offsetY, characterSize, wrapText);
+    }
+
+    void inventoryDisplay(Player player, sfRectangleShape* rect, float offsetX = 0,
+            float offsetY = 0, short characterSize = 25, bool wrapText = true)
+    {
+        // Get names of all inventory items.
+        string[] itemNames;
+        foreach (Item item; player.inventory)
+        {
+            itemNames ~= item.name;
+        }
+
+        // Sort names.
+        foreach (i, name; itemNames)
+        {
+            createText(name, rect, offsetX, offsetY + (characterSize * i + 5), characterSize, false);
+        }
+
     }
 
 }

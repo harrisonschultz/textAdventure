@@ -6,4 +6,5 @@ class Item {
    ItemType type;
    int value;
    string name;
+   string description;
 }

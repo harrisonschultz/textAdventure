@@ -72,7 +72,7 @@ class Engine
          state.enemy.health -= damageToEnemy;
          if (state.enemy.health <= 0)
          {
-            state.player = Combat.setRewards(state);
+            Combat.setRewards(state);
             state.menu = Menus.combatOver;
          }
 
