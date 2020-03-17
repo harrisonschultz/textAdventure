@@ -115,7 +115,8 @@ public:
             createActionList([new Resurrect().name]);
             createShopList(state.location.shop, state.player.inventory);
         }
-
+        createText(to!string(state.selectedAction), optionsBox, 400);
+        createText(to!string(state.menu), optionsBox, 400, 30);
         createSelectionHighlight(state);
     }
 
@@ -159,21 +160,22 @@ public:
 
         if (state.menu == Menus.shop)
         {
-            ulong buyLength = state.location.shop.items.length - 1;
-            ulong sellLength = state.player.inventory.length - 1;
+            ulong buyLength = state.location.shop.items.length;
+            ulong sellLength = state.player.inventory.length;
             sfRectangleShape_setSize(highlight, sfVector2f(300, lineHeight + 10));
             // Render buy selected highlight
-            if (state.selectedAction < sellLength)
+            if (state.selectedAction >= buyLength)
             {
-                sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
-                        windowHeight + 20 + (
-                        (lineHeight + paddingBetweenLines) * state.selectedAction) + padding));
+               sfRectangleShape_setPosition(highlight, sfVector2f(padding + 30 + 320,
+                          + ((lineHeight + paddingBetweenLines) * (
+                        state.selectedAction - buyLength)) + 100));
             }
             else
             {
-                sfRectangleShape_setPosition(highlight, sfVector2f(padding + 20,
-                        windowHeight + 20 + ((lineHeight + paddingBetweenLines) * (
-                        state.selectedAction - buyLength)) + padding));
+                
+                sfRectangleShape_setPosition(highlight, sfVector2f(padding + 30,
+                + (
+            (lineHeight + paddingBetweenLines) * state.selectedAction) + 100));
             }
 
         }
@@ -318,6 +320,7 @@ public:
         float offsetX = 20;
         float offsetY = 20;
         short characterSize = 25;
+        float linePadding = 10;
 
         // Buy
         createText("Buy", descriptionBox, offsetX, offsetY);
@@ -326,9 +329,9 @@ public:
         foreach (i, item; shop.items)
         {
             createText(item.name, descriptionBox, offsetX,
-                    offsetY + (25 * i + 5) + 50, characterSize, false);
+                    offsetY + (25 + linePadding) * i + 50, characterSize, false);
             createText(to!string(item.value), descriptionBox, offsetX + 240,
-                    offsetY + (25 * i + 5) + 50, characterSize, false);
+                    offsetY + (25 + linePadding) * i + 50, characterSize, false);
         }
 
         // Sell
@@ -338,9 +341,9 @@ public:
         foreach (p, it; inv)
         {
             createText(it.name, descriptionBox, offsetX + 320,
-                    offsetY + (25 * p + 5) + 50, characterSize, false);
+                    offsetY + (25 + linePadding) * p + 50, characterSize, false);
             createText(to!string(it.value), descriptionBox, offsetX + 320 + 240,
-                    offsetY + (25 * p + 5) + 50, characterSize, false);
+                    offsetY + (25 + linePadding) * p + 50, characterSize, false);
         }
     }
 

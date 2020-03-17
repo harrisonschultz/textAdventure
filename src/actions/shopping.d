@@ -11,6 +11,7 @@ class Shopping : Action {
     }
     
     override void onExecute (State* state) {
+        state.selectedAction = 0;
         state.menu = Menus.shop;
     }
 

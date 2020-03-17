@@ -6,13 +6,19 @@ import types.menus;
 import combat.combat;
 import std.conv;
 import std.stdio;
+import shops.shop;
 
 class Engine
 {
    static void moveSelectionDown(State* state)
    {
       ulong cap = getCap(state);
-      state.selectedAction++;
+
+      if (state.menu == Menus.shop && state.selectedAction == state.location.shop.items.length + state.player.inventory.length - 1) {
+          state.selectedAction = to!int(state.location.shop.items.length);
+      } else {
+         state.selectedAction++;
+      }
 
       if (state.selectedAction + 1 > cap)
       {
@@ -23,11 +29,74 @@ class Engine
    static void moveSelectionUp(State* state)
    {
       ulong cap = getCap(state);
-      state.selectedAction--;
+
+      if (state.menu == Menus.shop && state.selectedAction == state.location.shop.items.length) {
+          state.selectedAction = to!int(state.location.shop.items.length + state.player.inventory.length - 1);
+      } else {
+         state.selectedAction--;
+      }
 
       if (state.selectedAction < 0)
       {
          state.selectedAction = to!int(cap) - 1;
+      }
+   };
+
+   static void moveSelectionLeft(State* state)
+   {
+      if (state.menu == Menus.shop) {
+         ulong buyLength = state.location.shop.items.length;
+         ulong sellLength = state.player.inventory.length;
+
+         // If either menu is empty, dis allow movement;
+         if (sellLength == 0) {
+            return;
+         } else if (buyLength == 0) {
+            return;
+         }
+
+         // if you press right when you are at the right most.
+         if (state.selectedAction < buyLength) {
+            state.selectedAction += to!int(buyLength);
+            if (state.selectedAction > buyLength + sellLength - 1) {
+               state.selectedAction = to!int(buyLength);
+            }
+         }
+         else {
+            state.selectedAction -= to!int(buyLength);
+            if (state.selectedAction > buyLength - 1) {
+               state.selectedAction = 0;
+            }
+         }
+      }
+   };
+
+   static void moveSelectionRight(State* state)
+   {
+      if (state.menu == Menus.shop) {
+         ulong buyLength = state.location.shop.items.length;
+         ulong sellLength = state.player.inventory.length;
+
+         // If either menu is empty, dis allow movement;
+         if (sellLength == 0) {
+            return;
+         } else if (buyLength == 0) {
+            return;
+         }
+
+         // if you press right when you are at the right most.
+         if (state.selectedAction > buyLength -1) {
+            state.selectedAction -= to!int(buyLength);
+            if (state.selectedAction < 0) {
+               state.selectedAction = 0;
+            }
+         }
+         else {
+            state.selectedAction += to!int(buyLength);
+            if (state.selectedAction > buyLength - 1) {
+                  state.selectedAction = to!int(buyLength);
+            }
+         }
       }
    };
 
@@ -52,7 +121,12 @@ class Engine
       }
       else if (state.menu == Menus.shop)
       {
-         cap = state.player.inventory.length + state.location.shop.items.length;
+         if (state.selectedAction < state.location.shop.items.length) {
+
+         cap = state.location.shop.items.length;
+         } else {
+            cap = state.player.inventory.length + state.location.shop.items.length;
+         }
       }
       return cap;
    }
@@ -95,6 +169,8 @@ class Engine
       else if (state.menu == Menus.combatOver)
       {
          state.menu = Menus.actions;
+      } else if (state.menu == Menus.shop) {
+         Shop.buyOrSell(state);
       }
       else
       {

@@ -8,6 +8,7 @@ import std.string;
 import std.random;
 import std.algorithm;
 import ui.ui;
+import types.menus;
 import state.state;
 import std.conv;
 import engine;
@@ -64,6 +65,13 @@ void main() {
                     Engine.moveSelectionUp(&state);
                 } else if (event.key.code == 18) {
                     Engine.moveSelectionDown(&state);
+                } else if (event.key.code == 0) {
+                    Engine.moveSelectionLeft(&state);
+                } else if (event.key.code == 3) {
+                    Engine.moveSelectionRight(&state);
+                } else if (event.key.code == 5) {
+                    state.menu = Menus.actions;
+                }
                 } else if (event.key.code == 4 || event.key.code == 58) {
                     Engine.execute(&state);
                 }

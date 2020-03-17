@@ -6,6 +6,6 @@ import items.weapons.rustedSword;
 class HaydensBoroughShop : Shop {
    
    this() {
-      items = [new RustedSword()];
+      items = [new RustedSword(), new RustedSword(), new RustedSword()];
    }
 }

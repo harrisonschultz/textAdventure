@@ -16,6 +16,7 @@ class RandomCombat : Action
     override void onExecute(State* state)
     {
         ulong length = state.location.enemies.length;
+        state.selectedAction = 0;
         state.menu = Menus.combat;
         if (length == 1)
         {
