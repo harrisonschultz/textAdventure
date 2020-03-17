@@ -10,6 +10,7 @@ class Unarmed : Weapon
    {
       damage = 1;
       attacks = [jab];
+      name = "Unarmed";
    }
 }
 

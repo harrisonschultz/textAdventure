@@ -10,5 +10,6 @@ enum Menus
    playerKilled,
    store,
    buy,
-   shop
+   shop,
+   character
 }

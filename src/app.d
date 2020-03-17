@@ -70,8 +70,10 @@ void main() {
                 } else if (event.key.code == 3) {
                     Engine.moveSelectionRight(&state);
                 } else if (event.key.code == 5) {
+                    state.selectedAction = 0;
                     state.menu = Menus.actions;
-                }
+                } else if (event.key.code == 2) {
+                    state.menu = Menus.character;
                 } else if (event.key.code == 4 || event.key.code == 58) {
                     Engine.execute(&state);
                 }
